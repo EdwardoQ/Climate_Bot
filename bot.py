@@ -4,125 +4,79 @@ import os
 from discord.ext import commands
 import requests
 
-from passgen import gen_pass
-botlist = []
+from tipspolusi import tipschoosing
+from polutionfacts import factchoosing
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
 
 @bot.command()
-async def generatepassword(ctx, count_letters = 10):
-    await ctx.send(gen_pass(count_letters))
+async def perkenalan(ctx):
+    await ctx.send("Halo! Aku adalah **EcoBot**. \n\n"
+        "Aku bisa membantumu memahami dan mengurangi **polusi lingkungan**, "
+        "langsung dari rumahmu!\n\n"
+        " Coba perintah-perintah berikut:\n"
+        "- `!polusi` — Penjelasan umum tentang polusi\n"
+        "- `!polusianudara` — Apa itu pencemaran polusi?\n"
+        "- `!polusilaut` — Penjelasan tentang polusi laut\n"
+        "- `!sumberpolusi` — Sumber-Sumber polusi di dalam dunia kita\n"
+        "- `!faktapolusi` — Sumber-Sumber polusi di dalam dunia kita\n"
+        "- `!tipspolusi` — Tips mengurangi polusi dari rumah \n\n"
+        "Yuk, bersama-sama kita jaga bumi! \n\n"
+        "- '!meme' - Dapatkan meme lingkungan yang lucu!"
+    )
 
 @bot.command()
-async def add(ctx, left: int, right: int):
-    await ctx.send(left + right)
+async def polusi(ctx):
+    await ctx.send("Masuknya atau dimasukkannya makhluk hidup, zat, energi, atau komponen lain ke dalam lingkungan (air, udara, atau tanah) yang menyebabkan perubahan kualitas lingkungan dan mengganggu fungsi lingkungan tersebut. ")
 
 @bot.command()
-async def subtract(ctx, left: int, right: int):
-    await ctx.send(left - right)
+async def polusitanah(ctx):
+    await ctx.send("Pencemaran tanah terjadi saat tanah tercemar limbah beracun seperti plastik, pestisida, atau logam berat, yang merusak kesuburan tanah dan membahayakan lingkungan serta kesehatan manusia.")
 
 @bot.command()
-async def multiply(ctx, left: int, right: int):
-    await ctx.send(left * right)
+async def polusianair(ctx):
+    await ctx.send("Pencemaran air adalah masuknya zat berbahaya seperti limbah, minyak, atau bahan kimia ke dalam air (sungai, laut, danau), yang merusak kualitas air dan membahayakan makhluk hidup di dalamnya.")
 
 @bot.command()
-async def divide(ctx, left: int, right: int):
-    await ctx.send(left / right)
+async def polusiudara(ctx):
+    await ctx.send("Kondisi di mana udara terkontaminasi oleh zat-zat berbahaya atau beracun, baik dalam bentuk gas, partikel, maupun bahan kimia, yang dapat membahayakan kesehatan manusia, hewan, tumbuhan, dan lingkungan.")
 
 @bot.command()
-async def roll(ctx, dice: str):
-    try:
-        rolls, limit = map(int, dice.split('d'))
-    except Exception:
-        await ctx.send('Format has to be in NdN!')
-        return
-
-    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await ctx.send(result)
+async def polusilaut(ctx):
+    await ctx.send("masuk atau dimasukkannya makhluk hidup, zat, energi, atau komponen lain ke dalam lingkungan laut oleh kegiatan manusia, sehingga kualitas air laut menurun dan tidak sesuai lagi dengan baku mutu dan/atau fungsinya.")   
 
 @bot.command()
-async def openlist(ctx):
-    if botlist:
-        items = "\n".join(f"- {item}" for item in botlist)
-        await ctx.send(f"Your list:\n{items}")
-    else:
-        await ctx.send("Your list is empty!")
+async def sumberpolusi(ctx):
+    await ctx.send("Sumber polusi adalah segala sesuatu yang menyebabkan pencemaran lingkungan, baik itu udara, air, maupun tanah. Sumber ini bisa berasal dari aktivitas manusia maupun alam, dan dapat berupa zat padat, cair, atau gas yang merugikan kesehatan dan keseimbangan lingkungan.")
+    await ctx.send( "**Sumber Pencemaran Udara**\n"
+        "• Asap kendaraan bermotor - melepaskan gas karbon monoksida dan partikel berbahaya ke udara.\n"
+        "• Pembakaran sampah - menghasilkan zat kimia beracun yang mencemari udara dan membahayakan kesehatan.\n\n"
+        "**Sumber Pencemaran Air**\n"
+        "• Limbah rumah tangga - seperti sabun, deterjen, dan minyak yang mencemari saluran air dan sungai.\n"
+        "• Limbah industri - bahan kimia dari pabrik yang dibuang tanpa pengolahan ke sungai atau laut.\n\n"
+        "**Sumber Pencemaran Tanah**\n"
+        "• Sampah plastik - dibuang sembarangan dan sulit terurai, mencemari tanah dalam jangka panjang.\n"
+        "• Pestisida berlebihan - merusak kesuburan tanah dan mencemari air tanah di sekitarnya.")
+@bot.command()
+async def tipspolusi(ctx):
+    await ctx.send(tipschoosing())
 
 @bot.command()
-async def addlist(ctx, *, item: str):
-    botlist.append(item)
-    await ctx.send(f"Added '{item}' to the list!")
+async def faktapolusi(ctx):
+    await ctx.send(factchoosing())
 
 @bot.command()
-async def removelist(ctx, *, item: str):
-    try:
-        botlist.remove(item)
-        await ctx.send(f" Removed '{item}' from the list!")
-    except ValueError:
-        await ctx.send(f"'{item}' was not found in the list.")
-    
-@bot.command()
-async def meme(ctx):
-    rarity = random.randint(1,1000)
-    if rarity <= 500:
-        img_name = random.choice(os.listdir('commonmeme'))
-        with open(f'commonmeme/{img_name}', 'rb') as f:
-            picture = discord.File(f)
-        await ctx.send(f"Common Meme! :thumbsup: ", file=picture)
-        
-    
-    elif 501 <= rarity <= 900:
-        img_name = random.choice(os.listdir('rarememe'))
-        with open(f'rarememe/{img_name}', 'rb') as f:
-            picture = discord.File(f)
-        await ctx.send(f"Rare Meme! :fire: ", file=picture)
-    
-    
-    elif rarity >= 901:
-        img_name = random.choice(os.listdir('legendarymeme'))
-        with open(f'legendarymeme/{img_name}', 'rb') as f:
-            picture = discord.File(f)
-        await ctx.send(f"Legendary Meme! :star: ", file=picture)
-        
-
-    
-
-def get_duck_image_url():    
-    url = 'https://random-d.uk/api/random'
-    res = requests.get(url)
-    data = res.json()
-    return data['url']
-
-
-@bot.command('duck')
-async def duck(ctx):
-    '''Setelah kita memanggil perintah bebek (duck), program akan memanggil fungsi get_duck_image_url'''
-    image_url = get_duck_image_url()
-    await ctx.send(image_url)
-
-@bot.command()
-async def plshelp(ctx):
-    help_text = """
-**Available Commands:**
-- `$generatepassword [count_letters]` — Generates a random password (default 10 characters).
-- `$add <num1> <num2>` — Adds two numbers.
-- `$subtract <num1> <num2>` — Subtracts second number from the first.
-- `$multiply <num1> <num2>` — Multiplies two numbers.
-- `$divide <num1> <num2>` — Divides first number by the second.
-- `$roll NdN` — Rolls dice (e.g., `!roll 2d6`).
-- `$addlist <item>` — Adds an item to the list.
-- `$openlist` — Shows your list.
-- `$removelist <item>` — Removes an item from the list.
-- `$meme` — Shows a meme.
-"""
-    await ctx.send(help_text)
-
+async def climatememe(ctx):
+    img_name = random.choice(os.listdir('climatememe'))
+    with open(f'climatememe/{img_name}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(f"Meme lingkungan! :earth_africa: ", file=picture)
 
 bot.run("-")
