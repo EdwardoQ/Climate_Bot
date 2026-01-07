@@ -50,10 +50,9 @@ async def perkenalan(ctx):
         "- `!polusilaut` — Penjelasan tentang polusi laut\n"
         "- `!sumberpolusi` — Sumber-Sumber polusi di dalam dunia kita\n"
         "- `!faktapolusi` — Sumber-Sumber polusi di dalam dunia kita\n"
-        "- `!tipspolusi` — Tips mengurangi polusi dari rumah \n\n"
-        "Yuk, bersama-sama kita jaga bumi! \n\n"
-        "- '!meme' - Dapatkan meme lingkungan yang lucu! \n\n"
-        "- '!gamemenu' - Mainkan game edukasi lingkungan yang seru!"
+        "- `!tipspolusi` — Tips mengurangi polusi dari rumah \n"
+        "- `!meme` — Dapatkan meme lingkungan yang lucu! \n"
+        "- `!gamemenu` — Mainkan game edukasi lingkungan yang seru! \n\n"
     )
 
 @bot.command()
@@ -496,11 +495,9 @@ async def reuse(ctx):
     user_id = ctx.author.id
     tools_to_keep = list(UNIQUE_ITEMS)
     
-    # Eksekusi logika upcycle
     amount_added, old_total, new_total = GAME_SYSTEM.upcycle_all_trash(user_id, tools_to_keep)
 
     if amount_added > 0:
-        # Menentukan Title (English)
         if new_total < 50:
             rank = "Scrap Collector 🛠️"
         elif new_total < 200:
@@ -602,4 +599,4 @@ async def explore_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f"⏳ Kamu terlalu lelah untuk menjelajah! Coba lagi dalam **{error.retry_after:.0f} detik**.")
                 
-bot.run("-")
+bot.run("")
